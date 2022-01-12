@@ -107,8 +107,8 @@ class Practice{
 
                     PreparedStatement st2 = con.prepareStatement(query2);
                     st2.setString(1, name2);
-                    st2.setDouble(3, valuation2);
-                    st2.setInt(4, id2);
+                    st2.setDouble(2, valuation2);
+                    st2.setInt(3, id2);
 
                     int rowsUpdated = st2.executeUpdate();
                     if (rowsUpdated > 0) {
