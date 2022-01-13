@@ -1,17 +1,14 @@
 import java.sql.*;
-import java.util.Locale;
 import java.util.Scanner;
 
 class Practice{
     static int choice;
     public static void main(String[] args) throws Exception {
-        String tName;
         String url = "jdbc:mysql://localhost:3306/employee";
         String uname = "root";
         String pass = "";
 
         Connection con = DriverManager.getConnection(url, uname, pass);
-        Scanner sc = new Scanner(System.in);
         table(con);
     }
 
@@ -21,7 +18,7 @@ class Practice{
 
         System.out.println("Enter table name: ");
         tName = sc.nextLine();
-        tName.toLowerCase();
+        tName = tName.toLowerCase();
         //System.out.println(tName);
         if (tName.equals("employee")) {
             employee(tName, con);
@@ -120,6 +117,8 @@ class Practice{
                 case 4:
                     System.out.println("Enter 1 for particular record by id:");
                     System.out.println("Enter 2 for all record fetch:");
+                    System.out.println("Enter 3 for record fetch using like:");
+                    System.out.println("Enter 4 for record fetch by any field:");
                     int ch = sc.nextInt();
 
                     if (ch == 1) {
@@ -135,7 +134,7 @@ class Practice{
                         }
                         System.out.println();
                         st3.close();
-                    } else {
+                    } else if(ch==2){
                         String query3 = "select * from " + tName + ";";
 
                         Statement st3 = con.createStatement();
@@ -145,6 +144,106 @@ class Practice{
                             System.out.println(userData);
                         }
                         st3.close();
+                    }
+                    else if (ch == 3) {
+                        System.out.println("Enter 1 from front\nEnter 2 from back\nEnter 3 from middle");
+                        System.out.println("Enter your choice for like:");
+                        int ch2 = sc.nextInt();
+
+                        System.out.println("Enter your choice for field cname");
+                        String ch3 = sc.next();
+
+                        System.out.println("Enter string for like:");
+                        String id6 = sc.next();
+
+                        if(ch2==1){
+                            String query3 = "select * from " + tName + " where " + ch3 + " like '"+ id6 + "%'";
+
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getDouble(3);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else if(ch2==2){
+                            String query3 = "select * from " + tName + " where " + ch3 + " like '" + "%" + id6 + "'";
+
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getDouble(3);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else if(ch2==3){
+                            String query3 = "select * from " + tName + " where " + ch3 + " like " + "'%" + id6 + "%'";
+
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getDouble(3);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                    }
+                    else if (ch == 4) {
+
+                        System.out.print("Enter Any Field you want result for fetching id/cname/valuation: ");
+                        String id6 = sc.next();
+
+                        if(id6.equals("valuation")) {
+                            System.out.print("Enter Any Field value for column name you chosen: ");
+                            String id7 = sc.next();
+                            String query3 = "select * from " + tName + " where " + id6 + "=" + Double.parseDouble(id7);
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getDouble(3);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else if(id6.equals("id")) {
+                            System.out.print("Enter Any Field value for column name you chosen: ");
+                            String id7 = sc.next();
+                            String query3 = "select * from " + tName + " where " + id6 + "=" + Integer.parseInt(id7);
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getDouble(3);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else if(id6.equals("cname")){
+                            System.out.print("Enter Any Field value for column name you chosen: ");
+                            String id7 = sc.nextLine();
+                            id7+= sc.nextLine();
+                            String query3 = "select * from " + tName + " where " + id6 + "='" + id7 + "'";
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getDouble(3);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else {
+                            System.out.println("Enter correct value!!!\n");
+                        }
+                    }
+                    else {
+                        System.out.println("Enter correct value!!!\n");
                     }
                     break;
 
@@ -255,7 +354,7 @@ class Practice{
 
                     int rowsUpdated = st2.executeUpdate();
                     if (rowsUpdated > 0) {
-                        System.out.println("An existing company details was updated successfully with new details!");
+                        System.out.println("An existing Admin details was updated successfully with new details!");
                     }
                     st2.close();
                     break;
@@ -263,6 +362,7 @@ class Practice{
                 case 4:
                     System.out.println("Enter 1 for particular record by id:");
                     System.out.println("Enter 2 for all record fetch:");
+                    System.out.println("Enter 3 for record fetch using like:");
                     int ch = sc.nextInt();
 
                     if (ch == 1) {
@@ -279,7 +379,7 @@ class Practice{
                         }
                         System.out.println();
                         st3.close();
-                    } else {
+                    } else if(ch==2){
                         String query3 = "select * from " + tName + ";";
 
                         Statement st3 = con.createStatement();
@@ -289,6 +389,57 @@ class Practice{
                             System.out.println(userData);
                         }
                         st3.close();
+                    }
+                    else if (ch == 3) {
+                        System.out.println("Enter 1 from front\nEnter 2 from back\nEnter 3 from middle");
+                        System.out.println("Enter your choice for like:");
+                        int ch2 = sc.nextInt();
+
+                        System.out.println("Enter your choice for field name as password");
+                        String ch3 = sc.next();
+
+                        System.out.println("Enter string for like:");
+                        String id6 = sc.next();
+
+                        if(ch2==1){
+                            String query3 = "select * from " + tName + " where " + ch3 + " like '"+ id6 + "%'";
+
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else if(ch2==2){
+                            String query3 = "select * from " + tName + " where " + ch3 + " like '" + "%" + id6 + "'";
+
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else if(ch2==3){
+                            String query3 = "select * from " + tName + " where " + ch3 + " like " + "'%" + id6 + "%'";
+
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                    }
+                    else{
+                        System.out.println("Enter correct choice!!!!\n");
                     }
                     break;
 
@@ -332,7 +483,6 @@ class Practice{
 
     public static void employee(String tName,Connection con) throws Exception{
         Scanner sc = new Scanner(System.in);
-
         do {
             System.out.println("Enter 1 for Creating table");
             System.out.println("Enter 2 for Inserting into table");
@@ -423,6 +573,8 @@ class Practice{
                 case 4:
                     System.out.println("Enter 1 for particular record by id:");
                     System.out.println("Enter 2 for all record fetch:");
+                    System.out.println("Enter 3 for record fetch using like:");
+                    System.out.println("Enter 4 for record fetch by any field:");
                     int ch = sc.nextInt();
 
                     if (ch == 1) {
@@ -439,7 +591,8 @@ class Practice{
                         }
                         System.out.println();
                         st3.close();
-                    } else {
+                    }
+                    else if(ch==2){
                         String query3 = "select * from " + tName + ";";
 
                         Statement st3 = con.createStatement();
@@ -449,6 +602,109 @@ class Practice{
                             System.out.println(userData);
                         }
                         st3.close();
+                    }
+                    else if (ch == 3) {
+                        System.out.println("Enter 1 from front\nEnter 2 from back\nEnter 3 from middle");
+                        System.out.println("Enter your choice for like:");
+                        int ch2 = sc.nextInt();
+
+                        System.out.println("Enter your choice for field name or designation:");
+                        String ch3 = sc.next();
+
+                        System.out.println("Enter string for like:");
+                        String id6 = sc.next();
+
+                        if(ch2==1){
+                            String query3 = "select * from " + tName + " where " + ch3 + " like '"+ id6 + "%'";
+
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getString(3) + " : " + rs.getDouble(4);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else if(ch2==2){
+                            String query3 = "select * from " + tName + " where " + ch3 + " like '" + "%" + id6 + "'";
+
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getString(3) + " : " + rs.getDouble(4);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else if(ch2==3){
+                            String query3 = "select * from " + tName + " where " + ch3 + " like " + "'%" + id6 + "%'";
+
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getString(3) + " : " + rs.getDouble(4);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else {
+                            System.out.println("Enter correct value!!!\n");
+                        }
+                    }
+                    else if (ch == 4) {
+
+                        System.out.print("Enter Any Field you want result for fetching id/name/designation/salary: ");
+                        String id6 = sc.next();
+
+                        if(id6.equals("salary")) {
+                            System.out.print("Enter Any Field value for column name you chosen: ");
+                            String id7 = sc.next();
+                            String query3 = "select * from " + tName + " where " + id6 + "=" + Float.parseFloat(id7);
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getString(3) + " : " + rs.getDouble(4);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else if(id6.equals("id")) {
+                            System.out.print("Enter Any Field value for column name you chosen: ");
+                            String id7 = sc.next();
+                            String query3 = "select * from " + tName + " where " + id6 + "=" + Integer.parseInt(id7);
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getString(3) + " : " + rs.getDouble(4);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else if(id6.equals("name") || id6.equals("designation")){
+                            System.out.print("Enter Any Field value for column name you chosen: ");
+                            String id7 = sc.nextLine();
+                            id7+= sc.nextLine();
+                            String query3 = "select * from " + tName + " where " + id6 + "='" + id7 + "'";
+                            Statement st3 = con.createStatement();
+                            ResultSet rs = st3.executeQuery(query3);
+                            while (rs.next()) {
+                                String userData = rs.getInt(1) + " : " + rs.getString(2) + " : " + rs.getString(3) + " : " + rs.getDouble(4);
+                                System.out.println(userData);
+                            }
+                            System.out.println();
+                            st3.close();
+                        }
+                        else {
+                            System.out.println("Enter correct value!!!\n");
+                        }
+                    }
+                    else {
+                        System.out.println("Enter correct value!!!");
                     }
                     break;
 
